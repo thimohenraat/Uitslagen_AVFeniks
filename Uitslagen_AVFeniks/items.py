@@ -13,12 +13,21 @@ class WedstrijdItem(scrapy.Item):
     categorie = scrapy.Field()
 
 
-class UitslagenAvfeniksItem(scrapy.Item):
-    name = scrapy.Field()
+class CategorieItem(scrapy.Item):
+    categorie = scrapy.Field()
+    atleet = scrapy.Field()
 
 
-class UitslagenAvfeniksItem(scrapy.Item):
-    name = scrapy.Field()
+class AtleetItem(scrapy.Item):
+    atleet = scrapy.Field()
+    uitslag = scrapy.Field()
+
+
+class UitslagItem(scrapy.Item):
+    resultaat = scrapy.Field()
+    onderdeel = scrapy.Field()
+    wind = scrapy.Field()
+    categorie = scrapy.Field()
 
 
 class UitslagenAvfeniksItem(scrapy.Item):

@@ -1,6 +1,6 @@
 import scrapy
 from scrapy_splash import SplashRequest
-from ..items import WedstrijdItem
+from ..items import WedstrijdItem, CategorieItem, AtleetItem, UitslagItem
 
 
 class AtletiekSpider(scrapy.Spider):
@@ -18,7 +18,7 @@ class AtletiekSpider(scrapy.Spider):
         return splash:html()
         end
     """
-    # plaats = plaats[plaats.find(char1)+1 : plaats.find(char2)]
+
     custom_settings = {
         "DOWNLOAD_DELAY": 1,
     }
@@ -36,6 +36,7 @@ class AtletiekSpider(scrapy.Spider):
     def parse(self, response):
         wedstrijden = response.xpath("//tr[@onclick]")
         for wedstrijd in wedstrijden:
+
             wedstrijd_item = WedstrijdItem()
             wedstrijd_item["wedstrijd"] = wedstrijd.xpath(".//td/a/span/text()").get()
             wedstrijd_item["datum"] = wedstrijd.xpath(
@@ -47,22 +48,88 @@ class AtletiekSpider(scrapy.Spider):
             wedstrijd_item["categorie"] = []
 
             link = wedstrijd.xpath(".//td/a/@href").get()
-
-            # yield {"wedstrijd": wedstrijd_item}
-            yield response.follow(url=link, callback=self.parse_wedstrijd)
+            yield response.follow(
+                url=link,
+                callback=self.parse_wedstrijd,
+                meta={"wedstrijd_item": wedstrijd_item},
+            )
 
     def parse_wedstrijd(self, response):
+        wedstrijd_item = response.meta["wedstrijd_item"]
+
         verenigingen = response.xpath("//div[@id='verenigingenSelect']/a")
         for vereniging in verenigingen:
             naam = vereniging.xpath(".//span/text()").get()
             link = vereniging.xpath(".//@href").get()
-            if naam == "AV Feniks":
-                yield response.follow(url=link, callback=self.parse_categorie)
 
-    # def parse_categorie(self, response):
-    #     verenigingen = response.xpath("//div[@id='verenigingenSelect']/a")
-    #     for vereniging in verenigingen:
-    #         naam = vereniging.xpath(".//span/text()").get()
-    #         link = vereniging.xpath(".//@href").get()
-    #         if naam == "AV Feniks":
-    #             yield response.follow(url=link, callback=self.parse_categorie)
+            if naam == "AV Feniks":
+                yield response.follow(
+                    url=link,
+                    callback=self.parse_categorie,
+                    meta={"wedstrijd_item": wedstrijd_item},
+                )
+
+    def parse_categorie(self, response):
+        wedstrijd_item = response.meta["wedstrijd_item"]
+
+        categorieën = response.xpath("//table[@class='deelnemerstabel ']")
+        for categorie in categorieën:
+            tabel = categorie.xpath(".//preceding-sibling::h3[1]/text()").get()
+
+            categorie_item = CategorieItem()
+            categorie_item["categorie"] = tabel
+            categorie_item["atleet"] = []
+
+            atleten = categorie.xpath(".//tbody/tr")
+            for atleet in atleten:
+                naam = atleet.xpath(".//td[2]/a/text()").get().strip()
+                if "x" in tabel:
+                    naam = atleet.xpath(".//td/a/span[3]/text()").get().strip()
+                elif not naam:
+                    naam = atleet.xpath(".//td/a/span[2]/text()").get().strip()
+
+                atleet_item = AtleetItem()
+                atleet_item["atleet"] = naam
+                atleet_item["uitslag"] = []
+                # leeftijdCategorie =
+
+                uitslagen = atleet.xpath(".//td")
+                for uitslag in uitslagen:
+
+                    if "Combined-events" in tabel:
+                        resultaat = uitslag.xpath(".//span/text()").get()
+                        titel = uitslag.xpath(".//span/@title").get()
+                    else:
+                        resultaat = uitslag.xpath(".//b/span[2]/text()").get()
+                        titel = uitslag.xpath(".//b/span[2]/@title").get()
+
+                    if titel:
+                        onderdeel = titel
+                        if "<" in titel:
+                            onderdeel = onderdeel.split("<")[0]
+
+                        wind = titel
+                        if "m/s" in titel:
+                            wind = wind[wind.find("<br>") + 4 : wind.find("m/s<br />")]
+                        else:
+                            wind = "NT"
+
+                        uitslag_item = UitslagItem()
+                        uitslag_item["resultaat"] = resultaat
+                        uitslag_item["onderdeel"] = onderdeel
+                        uitslag_item["wind"] = wind
+                        uitslag_item["categorie"] = "NT"
+
+                        atleet_item["uitslag"].append(uitslag_item)
+
+                categorie_item["atleet"].append(atleet_item)
+
+            wedstrijd_item["categorie"].append(categorie_item)
+
+        yield wedstrijd_item
+        # yield {
+        #     "atleet": naam,
+        #     "resultaat": resultaat,
+        #     "onderdeel": onderdeel,
+        #     "wind": wind,
+        # }
