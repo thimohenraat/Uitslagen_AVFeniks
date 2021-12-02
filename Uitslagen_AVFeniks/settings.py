@@ -103,7 +103,7 @@ import os
 
 port = int(os.environ.get("PORT", 80))
 
-SPLASH_URL = "https://registry.heroku.com/scrapy-uitslagen-docker/release:" + str(port)
+SPLASH_URL = "https://scrapy-uitslagen-docker.herokuapp.com/" + str(port)
 
 
 FEED_EXPORT_ENCODING = "utf-8"
