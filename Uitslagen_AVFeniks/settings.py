@@ -110,7 +110,7 @@ if ON_HEROKU:
 else:
     port = 80
 
-SPLASH_URL = "localhost" + port
+SPLASH_URL = "http://localhost:" + port
 
 
 FEED_EXPORT_ENCODING = "utf-8"
