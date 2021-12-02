@@ -106,8 +106,10 @@ ON_HEROKU = os.environ.get("ON_HEROKU")
 if ON_HEROKU:
     # get the heroku port
     port = int(os.environ.get("PORT", 8050))
+    port = str(port)
 else:
     port = 80
+
 SPLASH_URL = "localhost" + port
 
 
