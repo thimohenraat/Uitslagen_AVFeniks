@@ -98,6 +98,17 @@ DUPEFILTER_CLASS = "scrapy_splash.SplashAwareDupeFilter"
 # HTTPCACHE_IGNORE_HTTP_CODES = []
 # HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
-SPLASH_URL = "http://localhost:8050"
+# SPLASH_URL = "http://localhost:8050"
+import os
+
+ON_HEROKU = os.environ.get("ON_HEROKU")
+
+if ON_HEROKU:
+    # get the heroku port
+    port = int(os.environ.get("PORT", 8050))
+else:
+    port = 80
+SPLASH_URL = "localhost" + port
+
 
 FEED_EXPORT_ENCODING = "utf-8"
