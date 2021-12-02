@@ -103,7 +103,7 @@ import os
 
 port = int(os.environ.get("PORT", 8050))
 
-SPLASH_URL = "http://localhost:" + port
+SPLASH_URL = "http://localhost:" + str(port)
 
 
 FEED_EXPORT_ENCODING = "utf-8"
