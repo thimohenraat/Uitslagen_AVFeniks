@@ -102,8 +102,8 @@ DUPEFILTER_CLASS = "scrapy_splash.SplashAwareDupeFilter"
 import os
 
 port = int(os.environ.get("PORT", 80))
-
-SPLASH_URL = "http://scrapy-uitslagen-docker.herokuapp:" + str(port)
+# + str(port)
+SPLASH_URL = "http://scrapy-uitslagen-docker.herokuapp:80"
 
 
 FEED_EXPORT_ENCODING = "utf-8"
