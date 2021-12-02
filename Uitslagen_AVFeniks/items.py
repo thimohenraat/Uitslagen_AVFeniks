@@ -20,6 +20,7 @@ class CategorieItem(scrapy.Item):
 
 class AtleetItem(scrapy.Item):
     atleet = scrapy.Field()
+    categorie = scrapy.Field()
     uitslag = scrapy.Field()
 
 
@@ -27,7 +28,6 @@ class UitslagItem(scrapy.Item):
     resultaat = scrapy.Field()
     onderdeel = scrapy.Field()
     wind = scrapy.Field()
-    categorie = scrapy.Field()
 
 
 class UitslagenAvfeniksItem(scrapy.Item):

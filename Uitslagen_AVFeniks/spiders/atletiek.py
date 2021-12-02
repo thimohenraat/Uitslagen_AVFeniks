@@ -88,10 +88,15 @@ class AtletiekSpider(scrapy.Spider):
                 elif not naam:
                     naam = atleet.xpath(".//td/a/span[2]/text()").get().strip()
 
+                if atleet.xpath(".//td[4]/a/text()").get():
+                    leeftijdCategorie = atleet.xpath(".//td[4]/a/text()").get().strip()
+                else:
+                    leeftijdCategorie = "NT"
+
                 atleet_item = AtleetItem()
                 atleet_item["atleet"] = naam
+                atleet_item["categorie"] = leeftijdCategorie
                 atleet_item["uitslag"] = []
-                # leeftijdCategorie =
 
                 uitslagen = atleet.xpath(".//td")
                 for uitslag in uitslagen:
@@ -118,7 +123,6 @@ class AtletiekSpider(scrapy.Spider):
                         uitslag_item["resultaat"] = resultaat
                         uitslag_item["onderdeel"] = onderdeel
                         uitslag_item["wind"] = wind
-                        uitslag_item["categorie"] = "NT"
 
                         atleet_item["uitslag"].append(uitslag_item)
 
@@ -127,9 +131,3 @@ class AtletiekSpider(scrapy.Spider):
             wedstrijd_item["categorie"].append(categorie_item)
 
         yield wedstrijd_item
-        # yield {
-        #     "atleet": naam,
-        #     "resultaat": resultaat,
-        #     "onderdeel": onderdeel,
-        #     "wind": wind,
-        # }
