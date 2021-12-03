@@ -99,11 +99,11 @@ DUPEFILTER_CLASS = "scrapy_splash.SplashAwareDupeFilter"
 # HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
 # SPLASH_URL = "http://localhost:8050"
-import os
+# import os
 
-port = int(os.environ.get("PORT", 80))
+# port = int(os.environ.get("PORT", 80))
 # + str(port)
-SPLASH_URL = "https://scrapy-uitslagen-docker.herokuapp:80"
+SPLASH_URL = "https://scrapy-uitslagen-docker.herokuapp.com/"
 
 
 FEED_EXPORT_ENCODING = "utf-8"
