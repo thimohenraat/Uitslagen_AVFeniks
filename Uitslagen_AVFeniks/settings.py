@@ -98,13 +98,13 @@ DUPEFILTER_CLASS = "scrapy_splash.SplashAwareDupeFilter"
 # HTTPCACHE_IGNORE_HTTP_CODES = []
 # HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
-# SPLASH_URL = "http://localhost:8050"
+SPLASH_URL = "http://localhost:8050"
 # import os
 
 # port = int(os.environ.get("PORT", 80))
 # + str(port)
-HTTPERROR_ALLOWED_CODES = [404]
-SPLASH_URL = "https://scrapy-uitslagen-docker.herokuapp.com"
+# HTTPERROR_ALLOWED_CODES = [404]
+# SPLASH_URL = "https://scrapy-uitslagen-docker.herokuapp.com"
 
 
 FEED_EXPORT_ENCODING = "utf-8"

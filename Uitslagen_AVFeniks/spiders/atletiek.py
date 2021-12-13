@@ -45,7 +45,7 @@ class AtletiekSpider(scrapy.Spider):
             wedstrijd_item["plaats"] = wedstrijd.xpath(
                 "normalize-space(.//td[3]/text())"
             ).get()
-            wedstrijd_item["categorie"] = []
+            wedstrijd_item["onderdeel"] = []
 
             link = wedstrijd.xpath(".//td/a/@href").get()
             yield response.follow(
@@ -75,9 +75,11 @@ class AtletiekSpider(scrapy.Spider):
         categorieën = response.xpath("//table[@class='deelnemerstabel ']")
         for categorie in categorieën:
             tabel = categorie.xpath(".//preceding-sibling::h3[1]/text()").get()
+            leeftijd = tabel.split("-")[0]
+            onderdeelTitel = tabel.split("-")[1]
 
             categorie_item = CategorieItem()
-            categorie_item["categorie"] = tabel
+            categorie_item["onderdeel"] = onderdeelTitel
             categorie_item["atleet"] = []
 
             atleten = categorie.xpath(".//tbody/tr")
@@ -91,7 +93,7 @@ class AtletiekSpider(scrapy.Spider):
                 if atleet.xpath(".//td[4]/a/text()").get():
                     leeftijdCategorie = atleet.xpath(".//td[4]/a/text()").get().strip()
                 else:
-                    leeftijdCategorie = "NT"
+                    leeftijdCategorie = leeftijd
 
                 atleet_item = AtleetItem()
                 atleet_item["atleet"] = naam
@@ -128,6 +130,6 @@ class AtletiekSpider(scrapy.Spider):
 
                 categorie_item["atleet"].append(atleet_item)
 
-            wedstrijd_item["categorie"].append(categorie_item)
+            wedstrijd_item["onderdeel"].append(categorie_item)
 
         yield wedstrijd_item

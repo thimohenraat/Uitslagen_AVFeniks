@@ -10,11 +10,11 @@ class WedstrijdItem(scrapy.Item):
     wedstrijd = scrapy.Field()
     datum = scrapy.Field()
     plaats = scrapy.Field()
-    categorie = scrapy.Field()
+    onderdeel = scrapy.Field()
 
 
 class CategorieItem(scrapy.Item):
-    categorie = scrapy.Field()
+    onderdeel = scrapy.Field()
     atleet = scrapy.Field()
 
 
