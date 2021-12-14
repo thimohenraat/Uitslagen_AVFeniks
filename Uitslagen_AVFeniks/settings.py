@@ -74,7 +74,7 @@ DUPEFILTER_CLASS = "scrapy_splash.SplashAwareDupeFilter"
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 # ITEM_PIPELINES = {
-#    'Uitslagen_AVFeniks.pipelines.UitslagenAvfeniksPipeline': 300,
+#     "Uitslagen_AVFeniks.pipelines.SQLlitePipeline": 300,
 # }
 
 # Enable and configure the AutoThrottle extension (disabled by default)

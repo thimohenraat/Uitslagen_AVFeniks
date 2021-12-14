@@ -7,6 +7,7 @@ import scrapy
 
 
 class WedstrijdItem(scrapy.Item):
+    id = scrapy.Field()
     wedstrijd = scrapy.Field()
     datum = scrapy.Field()
     plaats = scrapy.Field()

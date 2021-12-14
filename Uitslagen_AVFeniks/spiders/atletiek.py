@@ -33,11 +33,16 @@ class AtletiekSpider(scrapy.Spider):
             headers={"User-Agent": self.user_agent},
         )
 
+    index = 1
+
     def parse(self, response):
+
         wedstrijden = response.xpath("//tr[@onclick]")
         for wedstrijd in wedstrijden:
 
             wedstrijd_item = WedstrijdItem()
+            wedstrijd_item["id"] = self.index
+            self.index += 1
             wedstrijd_item["wedstrijd"] = wedstrijd.xpath(".//td/a/span/text()").get()
             wedstrijd_item["datum"] = wedstrijd.xpath(
                 ".//td[@class='datumCol']/span/text()"
